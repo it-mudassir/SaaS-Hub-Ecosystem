@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "SaaS Hub"
+description = "A premium SaaS ecosystem marketplace where users discover, filter, and launch a growing collection of digital products."
+version = "1.0.0"
+id = "artifacts/saas-hub"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22211
+
+[services.development]
+run = "pnpm --filter @workspace/saas-hub run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/saas-hub", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/saas-hub/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22211"
+BASE_PATH = "/"
