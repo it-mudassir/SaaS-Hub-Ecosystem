@@ -1,14 +1,16 @@
 import { useMemo, useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { ArrowDownRight, ArrowUpRight, CircleArrowUp, Compass, Sparkles } from 'lucide-react';
-import { products, type Product } from '@/data/products';
+import { type Product } from '@/data/products';
+import { useHubStore } from '@/data/hub-store';
 import { Footer, Header, ProductCard, ProductOverlay, ProductMark, SectionEyebrow } from '@/components/saas-hub';
 
 export default function Home() {
   const [, setLocation] = useLocation();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const { products, branding, promotion } = useHubStore();
   const featured = products.filter((product) => product.featured);
-  const latest = useMemo(() => products.filter((product) => product.isNew), []);
+  const latest = useMemo(() => products.filter((product) => product.isNew), [products]);
   const comingSoon = products.filter((product) => product.status === 'Coming soon');
 
   const openProduct = (product: Product) => setSelectedProduct(product);
@@ -19,7 +21,7 @@ export default function Home() {
 
   return (
     <div className="grain min-h-[100dvh] overflow-x-hidden">
-      <Header onExplore={() => setLocation('/apps')} />
+      <Header onExplore={() => setLocation('/apps')} branding={branding} />
       <main>
         <section className="relative overflow-hidden border-b border-foreground/10">
           <div className="hero-grid absolute inset-0 opacity-70" />
@@ -39,7 +41,7 @@ export default function Home() {
             <div className="relative hidden min-h-[430px] lg:block animate-rise delay-2">
               <div className="absolute inset-x-12 top-10 h-80 rounded-[2.5rem] border border-primary/20 bg-primary/8" />
               <div className="absolute right-0 top-0 w-64 rotate-6 rounded-[1.5rem] border border-foreground/10 bg-card p-5 shadow-2xl transition hover:rotate-3">
-                <div className="mb-12 flex items-center justify-between"><ProductMark product={products[1]} size="md" /><span className="font-mono-ui text-[10px] uppercase tracking-widest text-muted-foreground">02 / 07</span></div>
+                <div className="mb-12 flex items-center justify-between"><ProductMark product={products[1] ?? products[0]} size="md" /><span className="font-mono-ui text-[10px] uppercase tracking-widest text-muted-foreground">02 / {String(products.length).padStart(2, '0')}</span></div>
                 <p className="font-display text-2xl font-bold tracking-tight">Make ideas<br />travel further.</p>
                 <div className="mt-6 h-1 w-16 rounded-full bg-accent" />
               </div>
@@ -83,9 +85,21 @@ export default function Home() {
           <div className="marquee-track flex w-max items-center gap-8 whitespace-nowrap font-mono-ui text-[11px] uppercase tracking-[.2em]"><span>Coming into orbit</span><span className="text-accent">·</span><span>{comingSoon.map((product) => product.name).join('  /  ')}</span><span className="text-accent">·</span><span>Coming into orbit</span><span className="text-accent">·</span><span>{comingSoon.map((product) => product.name).join('  /  ')}</span></div>
         </section>
 
+        {promotion.enabled && (
+          <section className="mx-auto max-w-7xl px-5 py-10 lg:px-8">
+            <div className="relative overflow-hidden rounded-[2rem] border border-accent/35 bg-accent/12 p-7 sm:p-10">
+              <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full border border-accent/30" />
+              <div className="relative flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+                <div className="max-w-2xl"><SectionEyebrow>{promotion.eyebrow}</SectionEyebrow><h2 className="font-display text-3xl font-bold tracking-[-.06em] sm:text-4xl">{promotion.title}</h2><p className="mt-3 max-w-xl leading-7 text-muted-foreground">{promotion.description}</p></div>
+                <a href={promotion.buttonUrl} target="_blank" rel="noopener noreferrer" className="inline-flex shrink-0 items-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-bold text-accent-foreground transition hover:-translate-y-1" data-testid="link-promotion">{promotion.buttonLabel} <ArrowUpRight size={16} /></a>
+              </div>
+            </div>
+          </section>
+        )}
+
         <section className="mx-auto max-w-7xl px-5 py-24 lg:px-8"><div className="relative overflow-hidden rounded-[2rem] bg-foreground px-7 py-14 text-background sm:px-12 lg:px-20"><div className="absolute -right-12 -top-24 h-72 w-72 rounded-full border border-background/15" /><div className="absolute -right-2 -top-14 h-52 w-52 rounded-full border border-background/15" /><div className="relative max-w-2xl"><SectionEyebrow>For the curious</SectionEyebrow><h2 className="font-display text-4xl font-bold leading-[.98] tracking-[-.07em] sm:text-6xl">Your next great<br />tool is closer than you think<span className="text-accent">.</span></h2><p className="mt-6 max-w-lg leading-7 text-background/65">Browse the full collection by category, status, or just follow your curiosity.</p><Link href="/apps" className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-bold text-accent-foreground transition hover:-translate-y-1" data-testid="link-bottom-explore">Browse the collection <ArrowUpRight size={16} /></Link></div></div></section>
       </main>
-      <Footer />
+      <Footer branding={branding} />
       <ProductOverlay product={selectedProduct} onClose={() => setSelectedProduct(null)} onNext={nextProduct} />
     </div>
   );

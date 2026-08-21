@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
 import { ArrowUpRight, Filter, SlidersHorizontal } from 'lucide-react';
-import { products, categories, statuses, type Product } from '@/data/products';
+import { type Product } from '@/data/products';
+import { useHubStore } from '@/data/hub-store';
 import { Footer, Header, ProductCard, ProductOverlay, SearchAndFilters, SectionEyebrow, useProductSearch } from '@/components/saas-hub';
 
 export default function Apps() {
+  const { products, branding } = useHubStore();
+  const categories = ['All', ...Array.from(new Set(products.map((product) => product.category)))];
+  const statuses = ['All', 'Live', 'Beta', 'Coming soon'];
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const { query, setQuery, category, setCategory, status, setStatus, filtered } = useProductSearch(products);
 
@@ -30,7 +34,7 @@ export default function Apps() {
 
   return (
     <div className="grain min-h-[100dvh] overflow-x-hidden">
-      <Header />
+      <Header branding={branding} />
       <main>
         <section className="relative overflow-hidden border-b border-foreground/10">
           <div className="hero-grid absolute inset-0 opacity-60" />
@@ -65,7 +69,7 @@ export default function Apps() {
         </section>
         <section className="border-y border-foreground/10 bg-secondary/35"><div className="mx-auto flex max-w-7xl flex-col justify-between gap-5 px-5 py-12 sm:flex-row sm:items-center lg:px-8"><div><p className="font-display text-2xl font-bold tracking-[-.05em]">Building something useful?</p><p className="mt-1 text-sm text-muted-foreground">We’re always looking for the next thoughtful addition.</p></div><a href="mailto:hello@saashub.example?subject=Submit%20a%20tool" className="inline-flex items-center gap-2 self-start rounded-full bg-foreground px-4 py-2.5 text-sm font-bold text-background transition hover:-translate-y-0.5 sm:self-auto" data-testid="link-submit-tool">Tell us about it <ArrowUpRight size={15} /></a></div></section>
       </main>
-      <Footer />
+      <Footer branding={branding} />
       <ProductOverlay product={selectedProduct} onClose={() => setSelectedProduct(null)} onNext={nextProduct} />
     </div>
   );

@@ -12,6 +12,7 @@ import {
   X,
 } from 'lucide-react';
 import { type Product } from '@/data/products';
+import { type HubBranding } from '@/data/hub-store';
 
 export function ProductMark({ product, size = 'md' }: { product: Product; size?: 'sm' | 'md' | 'lg' }) {
   const sizes = { sm: 'h-9 w-9 text-sm', md: 'h-12 w-12 text-lg', lg: 'h-16 w-16 text-2xl' };
@@ -27,7 +28,7 @@ export function ProductMark({ product, size = 'md' }: { product: Product; size?:
   );
 }
 
-export function Header({ onExplore }: { onExplore?: () => void }) {
+export function Header({ onExplore, branding }: { onExplore?: () => void; branding?: HubBranding }) {
   const [location, setLocation] = useLocation();
   const [dark, setDark] = useState(() => typeof window !== 'undefined' && localStorage.getItem('saas-hub-theme') === 'dark');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -51,7 +52,7 @@ export function Header({ onExplore }: { onExplore?: () => void }) {
             <span className="absolute -right-1 -top-1 h-4 w-4 rounded-full bg-accent" />
             <span className="relative font-display text-lg font-bold">S</span>
           </span>
-          <span className="font-display text-[17px] font-bold tracking-[-.04em]">saas hub<span className="text-accent">.</span></span>
+          <span className="font-display text-[17px] font-bold tracking-[-.04em]">{branding?.brandName ?? 'saas hub'}<span className="text-accent">.</span></span>
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Primary navigation">
@@ -213,13 +214,13 @@ export function SectionEyebrow({ children }: { children: string }) {
   return <p className="mb-4 flex items-center gap-2 font-mono-ui text-[11px] font-medium uppercase tracking-[.2em] text-primary"><span className="h-1.5 w-1.5 rounded-full bg-accent" />{children}</p>;
 }
 
-export function Footer() {
+export function Footer({ branding }: { branding?: HubBranding }) {
   return (
     <footer id="about" className="border-t border-foreground/10">
       <div className="mx-auto grid max-w-7xl gap-12 px-5 py-14 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:px-8">
-        <div><Link href="/" className="font-display text-xl font-bold tracking-[-.05em]" data-testid="link-footer-logo">saas hub<span className="text-accent">.</span></Link><p className="mt-4 max-w-xs text-sm leading-6 text-muted-foreground">Independent software for people building the next useful thing.</p></div>
+        <div><Link href="/" className="font-display text-xl font-bold tracking-[-.05em]" data-testid="link-footer-logo">{branding?.brandName ?? 'saas hub'}<span className="text-accent">.</span></Link><p className="mt-4 max-w-xs text-sm leading-6 text-muted-foreground">{branding?.description ?? 'Independent software for people building the next useful thing.'}</p></div>
         <div><p className="mb-4 font-mono-ui text-[10px] uppercase tracking-[.18em] text-muted-foreground">Explore</p><div className="flex flex-col gap-3 text-sm font-semibold"><Link href="/apps" data-testid="link-footer-apps">All apps</Link><a href="/apps?status=Coming%20soon" data-testid="link-footer-coming">Coming soon</a></div></div>
-        <div><p className="mb-4 font-mono-ui text-[10px] uppercase tracking-[.18em] text-muted-foreground">SaaS Hub</p><div className="flex flex-col gap-3 text-sm font-semibold"><a href="#about" data-testid="link-footer-about">About the hub</a><a href="mailto:hello@saashub.example" data-testid="link-footer-contact">Say hello</a></div></div>
+        <div><p className="mb-4 font-mono-ui text-[10px] uppercase tracking-[.18em] text-muted-foreground">SaaS Hub</p><div className="flex flex-col gap-3 text-sm font-semibold"><a href="#about" data-testid="link-footer-about">About the hub</a><a href={`mailto:${branding?.contactEmail ?? 'hello@saashub.example'}`} data-testid="link-footer-contact">Say hello</a><Link href="/admin" data-testid="link-footer-admin">Admin dashboard</Link></div></div>
         <div><p className="mb-4 font-mono-ui text-[10px] uppercase tracking-[.18em] text-muted-foreground">Signal</p><p className="text-sm leading-6 text-muted-foreground">New tools, thoughtful launches, no noise.</p><div className="mt-4 flex gap-2"><span className="h-2 w-2 rounded-full bg-primary" /><span className="h-2 w-2 rounded-full bg-accent" /><span className="h-2 w-2 rounded-full bg-foreground/20" /></div></div>
       </div>
       <div className="mx-auto flex max-w-7xl flex-col gap-2 border-t border-foreground/10 px-5 py-5 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between lg:px-8"><span>© 2024 SaaS Hub. Built for momentum.</span><span className="font-mono-ui">A growing family of useful software.</span></div>
