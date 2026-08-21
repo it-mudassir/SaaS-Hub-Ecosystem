@@ -13,6 +13,13 @@
     <meta name="twitter:title" content="SaaS Hub" />
     <meta name="twitter:description" content="A focused home for useful software with a point of view." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      try {
+        if (localStorage.getItem('saas-hub-theme') === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (_) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

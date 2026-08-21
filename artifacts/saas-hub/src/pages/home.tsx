@@ -82,7 +82,7 @@ export default function Home() {
         </section>
 
         <section className="overflow-hidden border-y border-foreground/10 bg-primary py-5 text-primary-foreground">
-          <div className="marquee-track flex w-max items-center gap-8 whitespace-nowrap font-mono-ui text-[11px] uppercase tracking-[.2em]"><span>Coming into orbit</span><span className="text-accent">·</span><span>{comingSoon.map((product) => product.name).join('  /  ')}</span><span className="text-accent">·</span><span>Coming into orbit</span><span className="text-accent">·</span><span>{comingSoon.map((product) => product.name).join('  /  ')}</span></div>
+          <div className="marquee-track flex w-max items-center gap-8 whitespace-nowrap font-mono-ui text-[11px] uppercase tracking-[.2em]"><span>All the useful things</span><span className="text-accent">·</span><span>{products.map((product) => product.name).join('  /  ')}</span><span className="text-accent">·</span><span>All the useful things</span><span className="text-accent">·</span><span>{products.map((product) => product.name).join('  /  ')}</span></div>
         </section>
 
         {promotion.enabled && (
