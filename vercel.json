@@ -2,7 +2,7 @@
   "framework": "vite",
   "installCommand": "pnpm install --frozen-lockfile",
   "buildCommand": "pnpm --filter @workspace/saas-hub run build",
-  "outputDirectory": "artifacts/saas-hub/dist/public",
+  "outputDirectory": "artifacts/saas-hub/public",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
