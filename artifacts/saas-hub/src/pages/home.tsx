@@ -60,7 +60,7 @@ export default function Home() {
             <div><SectionEyebrow>Start here</SectionEyebrow><h2 className="font-display text-4xl font-bold tracking-[-.07em] sm:text-5xl">The ones to know<span className="text-accent">.</span></h2><p className="mt-3 text-muted-foreground">A few good places to put your attention.</p></div>
             <Link href="/apps" className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline" data-testid="link-see-all-featured">See all apps <ArrowUpRight size={16} /></Link>
           </div>
-          <div className="grid gap-5 md:grid-cols-3">{featured.map((product, index) => <div key={product.id} className={`animate-rise delay-${index + 1}`}><ProductCard product={product} onOpen={openProduct} featured /></div>)}</div>
+          <div className="grid gap-5 md:grid-cols-3">{[...featured, ...products.filter((product) => !product.featured)].slice(0, 3).map((product, index) => <div key={product.id} className={`animate-rise delay-${index + 1}`}><ProductCard product={product} onOpen={openProduct} featured /></div>)}</div>
         </section>
 
         <section className="border-y border-foreground/10 bg-secondary/35">
